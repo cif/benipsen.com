@@ -1,14 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Inconsolata:wght@200&display=swap');
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: #6D6E79;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+p {
+  font-family: Inconsolata, 'Courier New', Courier, monospace;
 }
 
 * {

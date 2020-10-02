@@ -1,0 +1,32 @@
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  font-family: Bangers, sans-serif;
+  font-size: 80px;
+  margin: 0;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+}
+
+.footer p {
+  flex: 1;
+  padding: 10px;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+}
