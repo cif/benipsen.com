@@ -18,6 +18,15 @@ p {
   font-family: Inconsolata, 'Courier New', Courier, monospace;
 }
 
+button {
+  padding: 10px;
+  background-color: #6D6E79;
+  color: #fff;
+  outline: none;
+  border: none;
+  margin: 20px;
+}
+
 * {
   box-sizing: border-box;
 }
