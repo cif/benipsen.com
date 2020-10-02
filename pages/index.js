@@ -12,6 +12,7 @@ export default function Home() {
       <Head>
         <title>Ben Ipsen: Digital Craftsperson</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       {new Array(party).fill(0).map((_, i) =>
         <Dot
