@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import styles from '../styles/index.module.css'
-import { Dot } from '../components/dot';
+import { Dots } from '../components/dots';
 
 export default function Home() {
 
@@ -12,17 +12,9 @@ export default function Home() {
       <Head>
         <title>Ben Ipsen: Digital Craftsperson</title>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
       </Head>
-      {new Array(party).fill(0).map((_, i) =>
-        <Dot
-          dir={Math.random() < 0.5 ? 1 : -1}
-          key={`ball${i}`}
-          size={Math.random() * 100}
-          speedX={Math.random() * 20}
-          speedY={Math.random() * 20}
-        />
-      )}
+      <Dots partyLevel={party} />
       <main>
         <h1 className={styles.title}>
           Ben Ipsen
@@ -30,7 +22,7 @@ export default function Home() {
         <p>
           digital craftsperson. fun haver. <br />more content, very soon.  
         </p>
-        <button onClick={() => setParty(20)}>More Party</button>
+        <button onClick={() => setParty(party + 20)}>More Party</button>
         <button onClick={() => setParty(0)}>Less Party</button>
       </main>
       
