@@ -12,7 +12,7 @@ export default function Home() {
       <Head>
         <title>Ben Ipsen: Digital Craftsperson</title>
         <link rel="icon" href="/favicon.ico" />
-        
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Dots partyLevel={party} />
       <main>
@@ -22,7 +22,7 @@ export default function Home() {
         <p>
           digital craftsperson. fun haver. <br />more content, very soon.  
         </p>
-        <button onClick={() => setParty(party + 20)}>More Party</button>
+        <button onClick={() => setParty(party + 10)}>More Party</button>
         <button onClick={() => setParty(0)}>Less Party</button>
       </main>
       
