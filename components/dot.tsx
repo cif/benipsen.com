@@ -1,4 +1,4 @@
-import { FunctionComponent, useState, useEffect } from 'react'
+import { FunctionComponent } from 'react'
 import styles from '../styles/dots.module.css'
 
 export type DotProps = {

@@ -1,5 +1,4 @@
 import { FunctionComponent, useState, useEffect } from 'react'
-import styles from '../styles/dots.module.css'
 import { Dot, DotProps } from './dot';
 
 type Props = {
@@ -66,7 +65,6 @@ const computeNextDotProps = ({ dir, size, speedX, speedY, x, y, opacity }): DotS
 
 
 export const Dots: FunctionComponent<Props> = ({ partyLevel = 0 }) => {
-
     const [dots, setDots] = useState([]) 
      // animate the dots all the time
      useEffect(() => {
