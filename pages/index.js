@@ -22,12 +22,11 @@ export default function Home() {
         <p>
           digital craftsperson. fun haver. <br />more content, very soon.  
         </p>
-        <button onClick={() => setParty(party + 20)}>{party > 0 && `More`} Party</button>
-        {party > 0 && <button onClick={() => setParty(0)}>Less Party</button>}
+        <button onClick={() => setParty(party + 20)}>More Party</button>
+        <button onClick={() => setParty(0)}>Less Party</button>
       </main>
       
       <footer className={styles.footer}>
-        <p><a href="https://github.com/cif/benipsen.com">source</a></p>
         <p><a href="https://github.com/cif">github</a></p>
         <p><a href="https://linkedin.com/in/benipsen">linkedin</a></p>
         <p><a href="https://twitter.com/benipsen">twitter</a></p>

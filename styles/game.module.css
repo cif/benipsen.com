@@ -1,0 +1,21 @@
+.game {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: rgb(87, 87, 87);
+    color: #fff;
+}
+
+.ship {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    line-height: 110px;
+}
+
+.asteroid {
+    position: absolute;
+}

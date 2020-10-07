@@ -1,5 +1,5 @@
 import { FunctionComponent, useState, useEffect } from 'react'
-import { Dot, DotProps } from './dot';
+import { Dot } from './dot';
 
 type Props = {
     partyLevel: number

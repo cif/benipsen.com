@@ -30,3 +30,7 @@ button {
 * {
   box-sizing: border-box;
 }
+
+svg {
+  overflow: visible;
+}
