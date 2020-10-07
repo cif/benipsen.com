@@ -74,16 +74,16 @@ export const computeNextPositionAndVelocity = ({
     let nextY = nextVelocity * Math.cos(rad) + positionY
     
     // keep on screen
-    if (nextX > window.innerWidth) {
+    if (nextX > window.innerWidth + 25) {
         nextX = 0
     }
-    if (nextX < 0) {
+    if (nextX < -25) {
         nextX = window.innerWidth
     }
-    if (nextY > window.innerHeight) {
+    if (nextY > window.innerHeight + 25) {
         nextY = 0
     }
-    if (nextY < 0) {
+    if (nextY < -25) {
         nextY = window.innerHeight
     }
 
@@ -126,7 +126,7 @@ export const generateAsteroidProps = (
     const velocity = Math.floor(Math.random() * 5) + 5
     const vector = Math.floor(Math.random() * 360)
     
-    // generate random psoition
+    // generate random position
     const positionX = Math.random() > 0.5
         ? window.innerWidth + radius
         : radius * -1
@@ -144,35 +144,37 @@ export const generateAsteroidProps = (
             : positionY,
         vector,
         velocity,
+        radius,
     };
 }
 
-export const generateInitialAsteriods = (): AsteriodProps[] => new Array(3)
+export const generateInitialAsteriods = (): AsteriodProps[] => new Array(1)
     .fill(0)
     .map(() => generateAsteroidProps())
 
-export const computeNextAsteroidProps = (props) => {
+export const computeNextAsteroidProps = (props: AsteriodProps) => {
     const {
         velocity,
         vector,
         positionX,
-        positionY
+        positionY,
+        radius
     } = props
     const rad = vector * (Math.PI / 180)
     let nextX = velocity * Math.sin(rad) + positionX
     let nextY = velocity * Math.cos(rad) + positionY
     
     // keep on screen
-    if (nextX > window.innerWidth) {
+    if (nextX > window.innerWidth + radius) {
         nextX = 0
     }
-    if (nextX < 0) {
+    if (nextX < 0 - radius) {
         nextX = window.innerWidth
     }
-    if (nextY > window.innerHeight) {
+    if (nextY > window.innerHeight + radius) {
         nextY = 0
     }
-    if (nextY < 0) {
+    if (nextY < 0 - radius) {
         nextY = window.innerHeight
     }
 
@@ -183,6 +185,40 @@ export const computeNextAsteroidProps = (props) => {
     }
 }    
 
-const detectShipCollisions = ({ asteriods, positionX, positionY }) => {
-    
-}
+export const detectShipCollisions = (gameState) => {
+    const {
+        asteriods,
+        positionX,
+        positionY,
+        lives,
+        collided,
+    } = gameState
+
+    let areCollisions = false
+    for (const { positionX: asteriodX, positionY: asteriodY, radius } of asteriods) {
+        // detect distance from ship coordinates
+        const dist = Math.sqrt(
+            Math.pow((asteriodX - positionX), 2) +
+            Math.pow((asteriodY - positionY), 2)
+        )
+        if (dist <= radius) {
+            // only decrement lives if not currently colliding
+            areCollisions = true
+            if (!collided) {
+                return {
+                    ...gameState,
+                    collided: true,
+                    lives: lives - 1,
+                    positionX: (window.innerWidth - 25) / 2,
+                    positionY: (window.innerHeight - 25) / 2,
+                    velocity: 0,
+                    opacity: 0
+                }
+            }
+        }
+    }
+    // wait until collisions are finis
+    return {
+        collided: areCollisions
+    }
+} 

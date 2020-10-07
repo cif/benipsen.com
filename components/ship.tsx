@@ -5,19 +5,22 @@ type Props = {
     rotation: number
     positionX: number
     positionY: number
+    opacity: number
 }
 
 export const Ship: FunctionComponent<Props> = ({
     rotation,
     positionX,
-    positionY
+    positionY,
+    opacity
 }) => (
     <div
                 className={styles.ship}
                 style={{
                     transform: `rotateZ(${rotation}deg)`,
                     bottom: positionY,
-                    left: positionX
+                    left: positionX,
+                    opacity: opacity
                 }}
             >
                 <svg>
@@ -28,7 +31,8 @@ export const Ship: FunctionComponent<Props> = ({
                         stroke="white"
                         stroke-width="2"
                     />
-                </svg>
+            </svg>
+            <span>({positionX}, {positionY}, {opacity})</span>
             </div>
 )
 

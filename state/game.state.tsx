@@ -10,7 +10,8 @@ import {
     computeNextRotationAndVelocity,
     computeNextPositionAndVelocity,
     computeNextAsteroidProps,
-    generateInitialAsteriods
+    generateInitialAsteriods,
+    detectShipCollisions,
 } from './game.calc.utils'
 import { AsteriodProps } from './common.types'
 
@@ -24,6 +25,9 @@ export type GameState = {
     positionX: number
     positionY: number
     velocity: number
+    collided: boolean
+    opacity: number
+    lives: number
     asteriods: AsteriodProps[]
     gameIsActive: boolean
 }
@@ -39,6 +43,9 @@ const defaultGameState: GameState | GameProvider = {
     positionX: 0,
     positionY: 0,
     velocity: 0,
+    collided: false,
+    opacity: 0,
+    lives: 3,
     asteriods: [],
     gameIsActive: false,
 }
@@ -72,9 +79,15 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
         }
 
         // otherwise, compute and set next state in the animation loop. 
-        const raf = requestAnimationFrame(() => {
+        const raf = requestAnimationFrame(() => 
             setGameState({
                 ...gameState,
+                
+                // keep faded in after collision
+                opacity: gameState.opacity < 1
+                    ? gameState.opacity + 0.02
+                    : 1,
+                
                 // rotation
                 ...computeNextRotationAndVelocity({
                     ...gameState,
@@ -87,12 +100,14 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
                     upArrowDown
                 }),
                 // asteroids
-                asteriods: gameState.asteriods.map(computeNextAsteroidProps)
-
+                asteriods: gameState.asteriods.map(computeNextAsteroidProps),
+                // detect any collisions
+                ...detectShipCollisions(gameState),
+                
             })
 
 
-        })
+        )
         return () => cancelAnimationFrame(raf)
      }, [gameState]);
 

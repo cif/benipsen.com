@@ -8,22 +8,24 @@ import styles from '../styles/game.module.css'
 export const Game: FunctionComponent<any> = () => {
     const {
         startGame,
-        rotationalVelocity,
         rotation,
         positionX,
         positionY,
         asteriods,
         gameIsActive,
+        opacity,
+        lives
     } = useContext<GameProvider>(GameStateContext);
-    console.log(asteriods)
+    
     return (
         <div className={styles.game}>
-            Hello! The velocity is: {rotationalVelocity} {rotation}
+            Lives {lives}
             {!gameIsActive && <button onClick={() => startGame()}>Start game</button>}
             <Ship 
                 rotation={rotation}
                 positionX={positionX}
                 positionY={positionY}
+                opacity={opacity}
             />
             {asteriods.map((asteriod, i) =>
                 <Asteriod

@@ -14,8 +14,20 @@
     margin: 0;
     padding: 0;
     line-height: 110px;
-}
+    border: 1px solid red;
+  
 
+}
+.ship span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 10px;
+    width: 300px;
+}
 .asteroid {
     position: absolute;
+    border: 1px solid red;
+    width: 5px;
+    height: 5px;
 }

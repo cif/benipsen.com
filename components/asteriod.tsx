@@ -18,7 +18,7 @@ export const Asteriod: FunctionComponent<Props> = ({
         <div
             className={styles.asteroid}
             style={{
-                top: positionY,
+                bottom: positionY,
                 left: positionX
             }}
         >
