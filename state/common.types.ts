@@ -16,5 +16,6 @@ export type AsteriodProps = {
     positionY: number
     radius?: number
     vector?: number
-    velocity?: number
+    velocity?: number,
+    hit: boolean
 }

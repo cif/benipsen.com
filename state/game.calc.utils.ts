@@ -5,7 +5,7 @@ const INCREMENTAL_ROTATION_VELOCITY = 1
 const MAX_VELOCITY = 20
 const INCREMENTAL_VELOCITY = 0.5 // accel
 const INCREMENTAL_VELOCITY_DECREASE = 0.3 // decel
-const BULLET_VELOCITY = 15;
+const BULLET_VELOCITY = 15
 
 export const computeNextRotationAndVelocity = ({
     rotation,
@@ -146,6 +146,7 @@ export const generateAsteroidProps = (
         vector,
         velocity,
         radius,
+        hit: false
     };
 }
 
@@ -212,21 +213,59 @@ export const computeNextBulletProps = (props: BulletProps) => {
     }
 } 
 
-export const detectShipCollisions = ({
+export const detectCollisions = ({
     asteriods,
     positionX,
     positionY,
     lives,
     collided,
+    bullets
 }) => {
-
     let areCollisions = false
-    for (
+    for (let asteriod of asteriods) {
         const {
             positionX: asteriodX,
             positionY: asteriodY,
             radius
-        } of asteriods) {
+        } = asteriod
+
+        // detect potential bullet collisions for each asteroid,
+        for (const bullet of bullets) {
+            const { positionX: bulletX, positionY: bulletY } = bullet
+            const dist = Math.sqrt(
+                Math.pow((asteriodX - bulletX), 2) +
+                Math.pow((asteriodY - bulletY), 2)
+            )
+            if (dist <= radius) {
+                // break apart asteriod
+                let newAsteriods = []
+                asteriods.forEach((ast: AsteriodProps) => {
+                    if (ast === asteriod) {
+                        // if the radius is bigger than theshold
+                        if (radius > 50) {
+                            newAsteriods.push(generateAsteroidProps(
+                                ast.positionX,
+                                ast.positionY,
+                                ast.radius / 2
+                            ))
+                            newAsteriods.push(generateAsteroidProps(
+                                ast.positionX,
+                                ast.positionY,
+                                ast.radius / 2
+                            ))
+                        }
+                    } else {
+                        newAsteriods.push(ast)
+                    }
+                })
+                return {
+                    // remove bullet
+                    bullets: bullets.filter(b => b !== bullet),
+                    asteriods: newAsteriods
+                }
+            }
+        }
+
         // detect distance from ship coordinates
         const dist = Math.sqrt(
             Math.pow((asteriodX - positionX), 2) +
@@ -247,7 +286,8 @@ export const detectShipCollisions = ({
             }
         }
     }
-    // wait until collisions are finished to uncollide
+
+    // wait until any collisions are finished to uncollide / reset
     return {
         collided: areCollisions
     }
@@ -279,5 +319,3 @@ export const detectFiringAndComputeBulletPositions = ({ spaceDown, bullets, firi
             .filter((b: BulletProps) => !b.offscreen)
     }
 }
-
-

@@ -25,7 +25,7 @@ export const Game: FunctionComponent<any> = () => {
             <div className={styles.scoreboard}>
                 Lives {lives} elapsed? {Math.floor(elapsed / 1000)}
             </div>
-            {!gameIsActive && <button onClick={() => startGame()}>Start game</button>}
+            <button onClick={() => startGame()}>Start/Reset</button>
             <Ship 
                 rotation={rotation}
                 positionX={positionX}

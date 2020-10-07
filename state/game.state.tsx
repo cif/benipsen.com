@@ -12,7 +12,7 @@ import {
     computeNextAsteroidProps,
     computeNextBulletProps,
     generateInitialAsteriods,
-    detectShipCollisions,
+    detectCollisions,
     detectFiringAndComputeBulletPositions,
 } from './game.calc.utils'
 import { AsteriodProps, BulletProps } from './common.types'
@@ -120,7 +120,7 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
                 
                
                 // detect any collisions with the ship
-                ...detectShipCollisions(gameState),
+                ...detectCollisions(gameState),
 
                 
                 
