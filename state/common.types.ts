@@ -3,6 +3,13 @@ export type Coord = {
     y: number
 }
 
+export type BulletProps = {
+    positionX: number
+    positionY: number
+    vector?: number
+    offscreen: boolean
+}
+
 export type AsteriodProps = {
     points?: Coord[]
     positionX: number

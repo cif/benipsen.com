@@ -10,10 +10,12 @@ import {
     computeNextRotationAndVelocity,
     computeNextPositionAndVelocity,
     computeNextAsteroidProps,
+    computeNextBulletProps,
     generateInitialAsteriods,
     detectShipCollisions,
+    detectFiringAndComputeBulletPositions,
 } from './game.calc.utils'
-import { AsteriodProps } from './common.types'
+import { AsteriodProps, BulletProps } from './common.types'
 
 export type GameState = {
     rotationalVelocity: number
@@ -23,11 +25,13 @@ export type GameState = {
     positionY: number
     velocity: number
     collided: boolean
+    firing: boolean
     opacity: number
     lives: number
     started: number
     elapsed: number
     asteriods: AsteriodProps[]
+    bullets: BulletProps[]
     gameIsActive: boolean
 }
 
@@ -43,11 +47,13 @@ const defaultGameState: GameState | GameProvider = {
     positionY: 0,
     velocity: 0,
     collided: false,
+    firing: false,
     opacity: 0,
     lives: 3,
     elapsed: 0,
     started: 0,
     asteriods: [],
+    bullets: [],
     gameIsActive: false,
 }
 
@@ -59,6 +65,7 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
     const rightArrowDown = useKeyPress('ArrowRight')
     const leftArrowDown = useKeyPress('ArrowLeft')
     const upArrowDown = useKeyPress('ArrowUp')
+    const spaceDown = useKeyPress(' ')
 
     // event handlers that affect state
     const startGame = (): void => 
@@ -105,10 +112,13 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
                     upArrowDown
                 }),
 
-                // asteroids
-                asteriods: gameState.asteriods.map(computeNextAsteroidProps),
-            
+                // detect firing and manage bullets
+                ...detectFiringAndComputeBulletPositions({ ...gameState, spaceDown }),
 
+                // asteroids + bullets
+                asteriods: gameState.asteriods.map(computeNextAsteroidProps),
+                
+               
                 // detect any collisions with the ship
                 ...detectShipCollisions(gameState),
 

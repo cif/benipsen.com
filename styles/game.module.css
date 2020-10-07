@@ -25,6 +25,8 @@
     font-size: 10px;
     width: 300px;
 }
+
+.bullet,
 .asteroid {
     position: absolute;
     border: 1px solid red;
@@ -36,5 +38,5 @@
     position: absolute;
     top: 0;
     left: 0;
-    
+
 }

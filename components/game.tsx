@@ -4,6 +4,7 @@ import { GameStateContext, GameProvider } from '../state/game.state';
 import Asteriod from './asteriod';
 import Ship from './ship';
 import styles from '../styles/game.module.css'
+import Bullet from './bullet';
 
 export const Game: FunctionComponent<any> = () => {
     const {
@@ -12,6 +13,7 @@ export const Game: FunctionComponent<any> = () => {
         positionX,
         positionY,
         asteriods,
+        bullets,
         gameIsActive,
         opacity,
         lives,
@@ -36,6 +38,13 @@ export const Game: FunctionComponent<any> = () => {
                     points={asteriod.points}
                     positionX={asteriod.positionX}
                     positionY={asteriod.positionY}
+                />
+            )}
+            {bullets.map((bull, i) =>
+                <Bullet
+                    key={`asteriod${i}`}
+                    positionX={bull.positionX}
+                    positionY={bull.positionY}
                 />
             )}
         </div>

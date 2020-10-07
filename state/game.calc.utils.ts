@@ -1,10 +1,11 @@
-import { AsteriodProps } from './common.types'
+import { AsteriodProps, BulletProps } from './common.types'
 
 const MAX_ROTATIONAL_VELOCITY = 8
 const INCREMENTAL_ROTATION_VELOCITY = 1
 const MAX_VELOCITY = 20
 const INCREMENTAL_VELOCITY = 0.5 // accel
 const INCREMENTAL_VELOCITY_DECREASE = 0.3 // decel
+const BULLET_VELOCITY = 15;
 
 export const computeNextRotationAndVelocity = ({
     rotation,
@@ -148,7 +149,7 @@ export const generateAsteroidProps = (
     };
 }
 
-export const generateInitialAsteriods = (): AsteriodProps[] => new Array(1)
+export const generateInitialAsteriods = (): AsteriodProps[] => new Array(3)
     .fill(0)
     .map(() => generateAsteroidProps())
 
@@ -183,19 +184,49 @@ export const computeNextAsteroidProps = (props: AsteriodProps) => {
         positionX: nextX,
         positionY: nextY
     }
-}    
+} 
 
-export const detectShipCollisions = (gameState) => {
+export const computeNextBulletProps = (props: BulletProps) => {
     const {
-        asteriods,
+        vector,
         positionX,
         positionY,
-        lives,
-        collided,
-    } = gameState
+    } = props
+    const rad = vector * (Math.PI / 180)
+    let nextX = BULLET_VELOCITY * Math.sin(rad) + positionX
+    let nextY = BULLET_VELOCITY * Math.cos(rad) + positionY
+    
+    // keep on screen
+    let offscreen = (
+        nextX > window.innerWidth ||
+        nextX < 0 ||
+        nextY > window.innerHeight ||
+        nextY < 0
+    )
+
+    return {
+        ...props,
+        offscreen, 
+        positionX: nextX,
+        positionY: nextY
+    }
+} 
+
+export const detectShipCollisions = ({
+    asteriods,
+    positionX,
+    positionY,
+    lives,
+    collided,
+}) => {
 
     let areCollisions = false
-    for (const { positionX: asteriodX, positionY: asteriodY, radius } of asteriods) {
+    for (
+        const {
+            positionX: asteriodX,
+            positionY: asteriodY,
+            radius
+        } of asteriods) {
         // detect distance from ship coordinates
         const dist = Math.sqrt(
             Math.pow((asteriodX - positionX), 2) +
@@ -206,7 +237,6 @@ export const detectShipCollisions = (gameState) => {
             areCollisions = true
             if (!collided) {
                 return {
-                    ...gameState,
                     collided: true,
                     lives: lives - 1,
                     positionX: (window.innerWidth - 25) / 2,
@@ -217,8 +247,37 @@ export const detectShipCollisions = (gameState) => {
             }
         }
     }
-    // wait until collisions are finis
+    // wait until collisions are finished to uncollide
     return {
         collided: areCollisions
     }
 } 
+
+export const detectFiringAndComputeBulletPositions = ({ spaceDown, bullets, firing, positionX, positionY, rotation }) => {
+    if (spaceDown && !firing) {
+        const bullet: BulletProps = {
+            positionX: positionX + 25,
+            positionY: positionY + 25,
+            vector: rotation,
+            offscreen: false
+        }
+        return {
+            bullets: [...bullets, bullet].map(computeNextBulletProps),
+            firing: true
+        }
+    } else if (!spaceDown) {
+        return {
+            firing: false,
+            bullets: bullets.map(computeNextBulletProps)
+        }
+    }
+    
+    return {
+        bullets: bullets
+            .map(computeNextBulletProps)
+            // cleanup offscreen bullets
+            .filter((b: BulletProps) => !b.offscreen)
+    }
+}
+
+
