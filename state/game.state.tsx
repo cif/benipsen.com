@@ -25,6 +25,8 @@ export type GameState = {
     collided: boolean
     opacity: number
     lives: number
+    started: number
+    elapsed: number
     asteriods: AsteriodProps[]
     gameIsActive: boolean
 }
@@ -43,6 +45,8 @@ const defaultGameState: GameState | GameProvider = {
     collided: false,
     opacity: 0,
     lives: 3,
+    elapsed: 0,
+    started: 0,
     asteriods: [],
     gameIsActive: false,
 }
@@ -61,6 +65,7 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
         setGameState({
             ...gameState,
             gameIsActive: true,
+            started: Date.now(),
             asteriods: generateInitialAsteriods(),
             positionX: (window.innerWidth - 25) / 2,
             positionY: (window.innerHeight - 25) / 2,
@@ -77,31 +82,37 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
 
         // otherwise, compute and set next state in the animation loop. 
         const raf = requestAnimationFrame(() => 
-            setGameState({
-                ...gameState,
-                
+            setGameState({...gameState,
+
+                // keep track of time
+                elapsed: Date.now() - gameState.started,
+
                 // keep faded in after collision
                 opacity: gameState.opacity < 1
                     ? gameState.opacity + 0.02
                     : 1,
                 
-                // rotation
+                // ship rotation
                 ...computeNextRotationAndVelocity({
                     ...gameState,
                     rightArrowDown,
                     leftArrowDown
                 }),
-                // position
+
+                // ship position
                 ...computeNextPositionAndVelocity({
                     ...gameState,
                     upArrowDown
                 }),
-                
+
                 // asteroids
                 asteriods: gameState.asteriods.map(computeNextAsteroidProps),
-                
+            
+
                 // detect any collisions with the ship
                 ...detectShipCollisions(gameState),
+
+                
                 
             })
 

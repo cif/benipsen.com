@@ -14,12 +14,15 @@ export const Game: FunctionComponent<any> = () => {
         asteriods,
         gameIsActive,
         opacity,
-        lives
+        lives,
+        elapsed
     } = useContext<GameProvider>(GameStateContext);
     
     return (
         <div className={styles.game}>
-            Lives {lives}
+            <div className={styles.scoreboard}>
+                Lives {lives} elapsed? {Math.floor(elapsed / 1000)}
+            </div>
             {!gameIsActive && <button onClick={() => startGame()}>Start game</button>}
             <Ship 
                 rotation={rotation}

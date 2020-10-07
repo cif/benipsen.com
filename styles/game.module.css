@@ -31,3 +31,10 @@
     width: 5px;
     height: 5px;
 }
+
+.scoreboard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+}
