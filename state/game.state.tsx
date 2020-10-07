@@ -15,9 +15,6 @@ import {
 } from './game.calc.utils'
 import { AsteriodProps } from './common.types'
 
-// note: have to chnage this in CSS to actualy change presentation
-const SHIP_SIZE = 50  
-
 export type GameState = {
     rotationalVelocity: number
     rotation: number
@@ -99,9 +96,11 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
                     ...gameState,
                     upArrowDown
                 }),
+                
                 // asteroids
                 asteriods: gameState.asteriods.map(computeNextAsteroidProps),
-                // detect any collisions
+                
+                // detect any collisions with the ship
                 ...detectShipCollisions(gameState),
                 
             })
