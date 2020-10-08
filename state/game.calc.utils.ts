@@ -191,7 +191,10 @@ export const computeNextAsteroidProps = (props: AsteriodProps) => {
 export const computeAsteriods = ({ asteriods, elapsed, generated }) => {
     // create new asteriods as needed.
     const seconds = Math.floor(elapsed / 1000)
-    if (seconds > 0 && seconds % 10 === 0 && !generated) {
+    if (seconds > 0 &&
+        seconds % 10 === 0 &&
+        asteriods.length < 10 && // keep it sane during game over screen
+        !generated) {
         //  generate one more each 10 seconds
         return {
             generated: true,
