@@ -189,14 +189,18 @@ export const computeNextAsteroidProps = (props: AsteriodProps) => {
 } 
 
 export const computeAsteriods = ({ asteriods, elapsed, generated }) => {
-    // every 10 seconds create a new asteriod
+    // create new asteriods as needed.
     const seconds = Math.floor(elapsed / 1000)
-    console.log('got generated?', generated)
     if (seconds > 0 && seconds % 10 === 0 && !generated) {
-        console.log('generating!', seconds, generated)
+        //  generate one more each 10 seconds
         return {
             generated: true,
-            asteriods: [...asteriods, generateAsteroidProps()].map(computeNextAsteroidProps)
+            asteriods: [
+                ...asteriods,
+                ...new Array((seconds / 10))
+                    .fill(0)
+                    .map(() => generateAsteroidProps())
+            ].map(computeNextAsteroidProps)
         }
     } else if (seconds % 10 != 0) {
         return {
