@@ -2,7 +2,7 @@
     width: 100%;
     height: 100vh;
     overflow: hidden;
-    background: rgb(87, 87, 87);
+    background:rgb(50,50,50);
     color: #fff;
 }
 
@@ -14,29 +14,63 @@
     margin: 0;
     padding: 0;
     line-height: 110px;
-    border: 1px solid red;
-  
-
-}
-.ship span {
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 10px;
-    width: 300px;
 }
 
 .bullet,
 .asteroid {
     position: absolute;
-    border: 1px solid red;
     width: 5px;
     height: 5px;
 }
 
 .scoreboard {
     position: absolute;
+    padding: 10px 30px;
     top: 0;
     left: 0;
+    height: 60px;
+    font-family: Inconsolata, 'Courier New', Courier, monospace;
+}
+.scoreboard svg {
+    transform: scale(0.5);
+    transform-origin: center center;
+}
+.scoreboard .lives {
+    position: absolute;
+    left: -40px;
+    top: 95px;
+}
 
+.backdrop {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+}
+
+.intro {
+    position: relative;
+    width: 500px;
+    margin: 50px auto;
+    display: block;
+    text-align: center;
+}
+
+.intro h1{
+    font-family: Bangers, sans-serif;
+    font-size: 80px;
+}
+
+.intro p {
+    font-size: 24px;
+}
+
+.startButton {
+    font-size: 30px;
+    font-weight: 100;
+    text-transform: uppercase;
+    font-family: Inconsolata, 'Courier New', Courier, monospace;
+    padding: 20px 50px;
+    background-color: white;
+    color: black;
 }

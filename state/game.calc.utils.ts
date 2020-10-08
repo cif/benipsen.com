@@ -6,6 +6,7 @@ const MAX_VELOCITY = 20
 const INCREMENTAL_VELOCITY = 0.5 // accel
 const INCREMENTAL_VELOCITY_DECREASE = 0.3 // decel
 const BULLET_VELOCITY = 15
+const MIN_ASTERIOD_RADIUS = 80
 
 export const computeNextRotationAndVelocity = ({
     rotation,
@@ -187,6 +188,28 @@ export const computeNextAsteroidProps = (props: AsteriodProps) => {
     }
 } 
 
+export const computeAsteriods = ({ asteriods, elapsed, generated }) => {
+    // every 10 seconds create a new asteriod
+    const seconds = Math.floor(elapsed / 1000)
+    console.log('got generated?', generated)
+    if (seconds > 0 && seconds % 10 === 0 && !generated) {
+        console.log('generating!', seconds, generated)
+        return {
+            generated: true,
+            asteriods: [...asteriods, generateAsteroidProps()].map(computeNextAsteroidProps)
+        }
+    } else if (seconds % 10 != 0) {
+        return {
+            generated: false,
+            asteriods: asteriods.map(computeNextAsteroidProps)
+        }
+    }
+     
+    return {
+        asteriods: asteriods.map(computeNextAsteroidProps)
+    }
+}
+
 export const computeNextBulletProps = (props: BulletProps) => {
     const {
         vector,
@@ -219,7 +242,8 @@ export const detectCollisions = ({
     positionY,
     lives,
     collided,
-    bullets
+    bullets,
+    score
 }) => {
     let areCollisions = false
     for (let asteriod of asteriods) {
@@ -241,8 +265,8 @@ export const detectCollisions = ({
                 let newAsteriods = []
                 asteriods.forEach((ast: AsteriodProps) => {
                     if (ast === asteriod) {
-                        // if the radius is bigger than theshold
-                        if (radius > 50) {
+                        // if the radius is bigger than threshold, split it
+                        if (radius > MIN_ASTERIOD_RADIUS) {
                             newAsteriods.push(generateAsteroidProps(
                                 ast.positionX,
                                 ast.positionY,
@@ -261,7 +285,8 @@ export const detectCollisions = ({
                 return {
                     // remove bullet
                     bullets: bullets.filter(b => b !== bullet),
-                    asteriods: newAsteriods
+                    asteriods: newAsteriods,
+                    score: score + 10 * (200 - Math.floor(radius)) 
                 }
             }
         }
@@ -271,7 +296,7 @@ export const detectCollisions = ({
             Math.pow((asteriodX - positionX), 2) +
             Math.pow((asteriodY - positionY), 2)
         )
-        if (dist <= radius) {
+        if (dist <= radius + 3) {
             // only decrement lives if not currently colliding
             areCollisions = true
             if (!collided) {
@@ -319,3 +344,11 @@ export const detectFiringAndComputeBulletPositions = ({ spaceDown, bullets, firi
             .filter((b: BulletProps) => !b.offscreen)
     }
 }
+
+export const detectEndOfGame = ({ lives }) => (lives > 0)
+    ? {}
+    : {
+        gameIsOver: true,
+        opacity: 0
+    }
+

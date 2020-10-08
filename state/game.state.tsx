@@ -9,11 +9,11 @@ import { useKeyPress } from '../hooks/useKeyPress'
 import {
     computeNextRotationAndVelocity,
     computeNextPositionAndVelocity,
-    computeNextAsteroidProps,
-    computeNextBulletProps,
     generateInitialAsteriods,
+    computeAsteriods,
     detectCollisions,
     detectFiringAndComputeBulletPositions,
+    detectEndOfGame
 } from './game.calc.utils'
 import { AsteriodProps, BulletProps } from './common.types'
 
@@ -26,13 +26,16 @@ export type GameState = {
     velocity: number
     collided: boolean
     firing: boolean
+    generated: boolean // true when generating an asteriod
     opacity: number
     lives: number
     started: number
     elapsed: number
+    score: number
     asteriods: AsteriodProps[]
     bullets: BulletProps[]
     gameIsActive: boolean
+    gameIsOver: boolean
 }
 
 export interface GameProvider extends GameState  {
@@ -48,17 +51,19 @@ const defaultGameState: GameState | GameProvider = {
     velocity: 0,
     collided: false,
     firing: false,
+    generated: false,
     opacity: 0,
     lives: 3,
     elapsed: 0,
     started: 0,
+    score: 0,
     asteriods: [],
     bullets: [],
     gameIsActive: false,
+    gameIsOver: false,
 }
 
 export const GameStateContext = createContext<GameProvider>(defaultGameState);
-
 
 export const GameStateProvider: FunctionComponent = ({ children }) => {
     const [gameState, setGameState] = useState<GameState>(defaultGameState)
@@ -72,7 +77,10 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
         setGameState({
             ...gameState,
             gameIsActive: true,
+            gameIsOver: false,
             started: Date.now(),
+            lives: 3,
+            score: 0,
             asteriods: generateInitialAsteriods(),
             positionX: (window.innerWidth - 25) / 2,
             positionY: (window.innerHeight - 25) / 2,
@@ -113,20 +121,20 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
                 }),
 
                 // detect firing and manage bullets
-                ...detectFiringAndComputeBulletPositions({ ...gameState, spaceDown }),
+                ...detectFiringAndComputeBulletPositions({
+                    ...gameState,
+                    spaceDown
+                }),
 
-                // asteroids + bullets
-                asteriods: gameState.asteriods.map(computeNextAsteroidProps),
+                // asteroids count and positions
+                ...computeAsteriods(gameState),
                 
-               
                 // detect any collisions with the ship
                 ...detectCollisions(gameState),
 
-                
-                
+                // end of the game
+                ...detectEndOfGame(gameState)
             })
-
-
         )
         return () => cancelAnimationFrame(raf)
      }, [gameState]);

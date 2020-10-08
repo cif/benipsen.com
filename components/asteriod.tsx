@@ -22,7 +22,7 @@ export const Asteriod: FunctionComponent<Props> = ({
                 left: positionX
             }}
         >
-           <svg>
+            <svg>
                 <polygon
                     id="polygon"
                     points={points.map(
