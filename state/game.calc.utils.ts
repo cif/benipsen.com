@@ -298,12 +298,14 @@ export const detectCollisions = ({
             }
         }
 
-        // detect distance from ship coordinates
+        // detect distance from ship coordinates (centered)
+        const shipCenterX = positionX + 25
+        const shipCenterY = positionY + 25
         const dist = Math.sqrt(
-            Math.pow((asteriodX - positionX), 2) +
-            Math.pow((asteriodY - positionY), 2)
+            Math.pow((asteriodX - shipCenterX), 2) +
+            Math.pow((asteriodY - shipCenterY), 2)
         )
-        if (dist <= radius + 3) {
+        if (dist <= radius - 3) {
             // only decrement lives if not currently colliding
             areCollisions = true
             if (!collided) {
