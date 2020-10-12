@@ -7,6 +7,8 @@ const INCREMENTAL_VELOCITY = 0.5 // accel
 const INCREMENTAL_VELOCITY_DECREASE = 0.3 // decel
 const BULLET_VELOCITY = 15
 const MIN_ASTERIOD_RADIUS = 80
+const POLYGON_POINT_RANDOMESS = 20
+const SECONDS_TO_GENERATE_ASTEROIDS = 10
 
 export const computeNextRotationAndVelocity = ({
     rotation,
@@ -104,15 +106,14 @@ export const generateAsteroidProps = (
 ): AsteriodProps => { 
     // generate a random polygon 
     const radius = initRadius ? initRadius : Math.floor(Math.random() * 100) + 100
-    const degreRandomization = 20;
     const sides = Math.floor(Math.random() * 9) + 5
     const angles = new Array(sides).fill(0)
         // at even angles
         .map((_, i) => Math.floor(360 / sides) * i)
         // randomize within degress
         .map((ang) => {
-            const min = ang - degreRandomization
-            const max = ang + degreRandomization
+            const min = ang - POLYGON_POINT_RANDOMESS
+            const max = ang + POLYGON_POINT_RANDOMESS
             // return ang
             return ang > 0 ? Math.floor(Math.random() * (max - min)) + min : 0
         })
@@ -192,15 +193,15 @@ export const computeAsteriods = ({ asteriods, elapsed, generated }) => {
     // create new asteriods as needed.
     const seconds = Math.floor(elapsed / 1000)
     if (seconds > 0 &&
-        seconds % 10 === 0 &&
-        asteriods.length < 10 && // keep it sane during game over screen
+        seconds % SECONDS_TO_GENERATE_ASTEROIDS === 0 &&
+        asteriods.length < 15 && // keep it sane during game over screen
         !generated) {
         //  generate one more each 10 seconds
         return {
             generated: true,
             asteriods: [
                 ...asteriods,
-                ...new Array((seconds / 10))
+                ...new Array(Math.floor((seconds / SECONDS_TO_GENERATE_ASTEROIDS)))
                     .fill(0)
                     .map(() => generateAsteroidProps())
             ].map(computeNextAsteroidProps)

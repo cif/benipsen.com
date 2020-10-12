@@ -38,11 +38,7 @@ export type GameState = {
     gameIsOver: boolean
 }
 
-export interface GameProvider extends GameState  {
-    startGame?: () => void
-}
-
-const defaultGameState: GameState | GameProvider = {
+const defaultGameState: GameState = {
     rotationalVelocity: 0,
     rotation: 0,
     thrustRotation: 0,
@@ -63,7 +59,14 @@ const defaultGameState: GameState | GameProvider = {
     gameIsOver: false,
 }
 
-export const GameStateContext = createContext<GameProvider>(defaultGameState);
+export interface GameProvider extends GameState  {
+    startGame: () => void
+}
+
+export const GameStateContext = createContext<GameProvider>({
+    ...defaultGameState,
+    startGame: () => { } 
+});
 
 export const GameStateProvider: FunctionComponent = ({ children }) => {
     const [gameState, setGameState] = useState<GameState>(defaultGameState)
