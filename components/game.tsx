@@ -1,9 +1,9 @@
 
 import { FunctionComponent, useContext } from 'react'
-import { GameStateContext, GameProvider } from '../state/game.state';
-import Asteriod from './asteriod';
-import Bullet from './bullet';
-import Ship from './ship';
+import { GameStateContext, GameProvider } from '../state/game.state'
+import Asteriod from './asteriod'
+import Bullet from './bullet'
+import Ship from './ship'
 import styles from '../styles/game.module.css'
 
 export const Game: FunctionComponent<any> = () => {
@@ -18,8 +18,8 @@ export const Game: FunctionComponent<any> = () => {
         gameIsOver,
         opacity,
         lives,
-        score
-    } = useContext<GameProvider>(GameStateContext);
+        score,
+    } = useContext<GameProvider>(GameStateContext)
     
     return (
         <div className={styles.game}>

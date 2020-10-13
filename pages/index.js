@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Head from 'next/head'
+import Link from 'next/link'
 import styles from '../styles/index.module.css'
 import { Dots } from '../components/dots';
 
@@ -24,6 +25,8 @@ export default function Home() {
         </p>
         <button onClick={() => setParty(party + 20)}>More Party</button>
         <button onClick={() => setParty(0)}>Less Party</button>
+        <p><Link href="/fun">Play Asteriods!</Link></p>
+        <p><a href="https://github.com/cif/benipsen.com">view source</a></p>
       </main>
       
       <footer className={styles.footer}>
