@@ -75,7 +75,7 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
     const upArrowDown = useKeyPress('ArrowUp')
     const spaceDown = useKeyPress(' ')
 
-    // event handlers that affect state
+    // start game, sets game running
     const startGame = (): void => 
         setGameState({
             ...gameState,
@@ -90,7 +90,7 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
         })
     
     
-    // state loop
+    // state loop, called when gamestate is updated
     useEffect(() => {
         
         // if the game is inactive, just return default game state
@@ -132,7 +132,7 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
                 // asteroids count and positions
                 ...computeAsteriods(gameState),
                 
-                // detect any collisions with the ship
+                // detect collisions of game objects
                 ...detectCollisions(gameState),
 
                 // end of the game
