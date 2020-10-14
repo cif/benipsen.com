@@ -105,7 +105,7 @@ export const GameStateProvider: FunctionComponent = ({ children }) => {
                 // keep track of time
                 elapsed: Date.now() - gameState.started,
 
-                // keep faded in after collision
+                // fade in after collision
                 opacity: gameState.opacity < 1
                     ? gameState.opacity + 0.02
                     : 1,
