@@ -30,6 +30,7 @@ main.content {
 .footer {
   display: flex;
   flex-direction: row;
+  z-index: 50;
 }
 
 .footer p {

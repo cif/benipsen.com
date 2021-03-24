@@ -21,7 +21,7 @@ export default function Home() {
           Ben Ipsen
         </h1>
         <p>
-          .com! <br /> digital craftsperson. <br />more content, very soon.
+          digital craftsperson.
         </p>
         {/* <button onClick={() => setParty(party + 20)}>More Dots</button>
         <button onClick={() => setParty(party - 20)}>Less Dots</button> */}
